@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, Image, Button, Alert,} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image, Button,} from 'react-native';
 
 const Introduction = ({ navigation }) => {
   return (
@@ -21,7 +21,7 @@ const Introduction = ({ navigation }) => {
           <Button 
             title="CHCEM ZAČAŤ" 
             color='#999'
-            onPress={ () => navigation.navigate("Home")}
+            onPress={ () => navigation.navigate("LogIn")}
           />
         </View>
       </View>

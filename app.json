@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "BeBetter",
-    "slug": "BeBetter",
+    "slug": "bebetter",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1f0262fe-f81d-498d-ad52-786bf925de70"
+      }
+    },
+    "owner": "matejcik24"
   }
 }
