@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, SafeAreaView, TextInput, Button, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import PocketBase, { AsyncAuthStore } from 'pocketbase';
 
 const SignUp = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -10,27 +11,44 @@ const SignUp = ({ navigation }) => {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
+  // Initialize Auth Store for PocketBase
+  const store = new AsyncAuthStore({
+    save: async (serialized) => AsyncStorage.setItem('pb_auth', serialized),
+    initial: AsyncStorage.getItem('pb_auth'),
+  });
+
+  // Initialize PocketBase instance
+  const pb = new PocketBase('https://mathiasdb.em1t.xyz/', store);
+
   const handleSignUp = async () => {
     if (!username || !email || !password || !passwordConfirm) {
-      Alert.alert('Prosím vyplňte všetky polia');
+      Alert.alert('Please fill in all fields');
       return;
     }
     if (password !== passwordConfirm) {
-      Alert.alert('Heslá sa nezhodujú');
+      Alert.alert('Passwords do not match');
       return;
     }
 
     try {
-      const response = await axios.post('http://192.168.0.154:3306', {
-        username,
+      // Create a new user in PocketBase
+      const newUser = await pb.collection('users').create({
+        name: username, // Use the username as the name
         email,
         password,
-        passwordConfirm
+        passwordConfirm,
       });
+
+      // Display success message
+      Alert.alert('Signup successful');
       navigation.navigate('LogIn');
     } catch (error) {
-      console.error('Chyba pri registrácií:', error);
-      Alert.alert('Registrácia zlyhala', 'Skúste to prosím neskôr.');
+      console.error('Error signing up:', error);
+      if (error.code === 'EMAIL_EXISTS') {
+        Alert.alert('Email already in use', 'Please use a different email address.');
+      } else {
+        Alert.alert('Signup failed', 'Please try again later.');
+      }
     }
   };
 
@@ -42,9 +60,9 @@ const SignUp = ({ navigation }) => {
         </View>
         <View style={{ flex: 1, justifyContent: 'center', width: '80%' }}>
           <View>
-            <Text style={styles.labels}>Meno:</Text>
+            <Text style={styles.labels}>Username:</Text>
             <TextInput
-              placeholder='Meno'
+              placeholder='Username'
               keyboardAppearance='dark'
               placeholderTextColor='#888'
               backgroundColor='#333'
@@ -56,9 +74,9 @@ const SignUp = ({ navigation }) => {
             />
           </View>
           <View style={{ paddingTop: 15 }}>
-            <Text style={styles.labels}>Prihlasovací e-mail:</Text>
+            <Text style={styles.labels}>Email:</Text>
             <TextInput
-              placeholder='E-mail'
+              placeholder='Email'
               keyboardAppearance='dark'
               placeholderTextColor='#888'
               backgroundColor='#333'
@@ -71,10 +89,10 @@ const SignUp = ({ navigation }) => {
             />
           </View>
           <View style={{ paddingTop: 15 }}>
-            <Text style={styles.labels}>Heslo:</Text>
+            <Text style={styles.labels}>Password:</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#333', borderRadius: 10, justifyContent: 'space-between', paddingRight: 10, marginTop: 5 }}>
               <TextInput
-                placeholder='Heslo'
+                placeholder='Password'
                 keyboardAppearance='dark'
                 placeholderTextColor='#888'
                 backgroundColor='#333'
@@ -92,10 +110,10 @@ const SignUp = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View style={{ paddingTop: 15 }}>
-              <Text style={styles.labels}>Potvrďte heslo:</Text>
+              <Text style={styles.labels}>Confirm Password:</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#333', borderRadius: 10, justifyContent: 'space-between', paddingRight: 10, marginTop: 5 }}>
                 <TextInput
-                  placeholder='Heslo'
+                  placeholder='Confirm Password'
                   keyboardAppearance='dark'
                   placeholderTextColor='#888'
                   backgroundColor='#333'
@@ -114,7 +132,7 @@ const SignUp = ({ navigation }) => {
               </View>
               <View style={{ marginTop: 15 }}>
                 <Button
-                  title='Registrovať sa'
+                  title='Sign Up'
                   color='#006cff'
                   onPress={handleSignUp}
                 />
@@ -122,9 +140,9 @@ const SignUp = ({ navigation }) => {
             </View>
           </View>
           <View style={{ position: 'absolute', bottom: 0, left: '21.5%', flexDirection: 'row', gap: 10 }}>
-            <Text style={{ color: '#fff', textAlign: 'center' }}>Už máte účet?</Text>
+            <Text style={{ color: '#fff', textAlign: 'center' }}>Already have an account?</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-              <Text style={{ color: 'red', paddingBottom: 0 }}>Prihlásiť sa</Text>
+              <Text style={{ color: 'red', paddingBottom: 0 }}>Log In</Text>
             </TouchableOpacity>
           </View>
         </View>

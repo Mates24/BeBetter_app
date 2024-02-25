@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const MakeOwn = ({navigation}) => {
+const MakeOwn = ({ navigation }) => {
   const [elements, setElements] = useState([]);
   const [addedElements, setAddedElements] = useState([]);
 
@@ -23,9 +23,9 @@ const MakeOwn = ({navigation}) => {
   const [text2, onChangeText2] = React.useState('Počet op.: ');
   const [text3, onChangeText3] = React.useState('Čas trvania: min');
 
-  const [text4, onChangeText4] = useState('Čas trvania: min');
+  const [text4, onChangeText4] = React.useState('Čas trvania: min');
   const [text5, onChangeText5] = React.useState('Počet op.: ');
-  const [text6, onChangeText6] = useState('Čas trvania: min');
+  const [text6, onChangeText6] = React.useState('Čas trvania: min');
 
   const Separator = () => <View style={styles.separator} />;
 
@@ -56,13 +56,20 @@ const MakeOwn = ({navigation}) => {
 
   const saveScreen = async () => {
     try {
-      const screenData = JSON.stringify({ savedProgramName: programName, savedProgramContent: program, addedElements });
+      const screenData = JSON.stringify({
+        savedProgramName: programName,
+        savedProgramContent: program,
+        addedElements: addedElements,
+        elements: elements.map(element => element.props.children)
+      });
       await AsyncStorage.setItem('saved_screen', screenData);
       Alert.alert('Tréning bol úspešne uložený');
     } catch (error) {
-      Alert.error('Chyba pri ukladaní:', error);
+      console.error('Error saving screen:', error);
+      Alert.alert('Chyba pri ukladaní:', error.message);
     }
   };
+                
 
   const deleteScreen = async () => {
     try {
@@ -79,20 +86,50 @@ const MakeOwn = ({navigation}) => {
     // Generate a unique key for the new element
     const key = Math.random().toString(36).substring(7);
     // Create the new TouchableOpacity element based on the selected type
-    const newElement = (
-      <TouchableOpacity key={key} style={type === 'Rozcvička' ? styles.warmup : type === 'Cvičenie' ? styles.exercise : styles.stretching}>
+    const newWarmup = (
+      <TouchableOpacity key={key} style={styles.warmup}>
         <Text style={{color: '#888', paddingLeft: 10,}}>{type}</Text>
         <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
         <TextInput
-          onChangeText={type === 'Rozcvička' ? onChangeText4 : type === 'Cvičenie' ? onChangeText5 : onChangeText6}
-          value={type === 'Rozcvička' ? text4 : type === 'Cvičenie' ? text5 : text6}
+          onChangeText={onChangeText4}
+          value={text4}
+          keyboardAppearance='dark'
+          style={styles.inputsteps}
+        />
+      </TouchableOpacity>
+    );
+    const newExercise = (
+      <TouchableOpacity key={key} style={styles.exercise}>
+        <Text style={{color: '#888', paddingLeft: 10,}}>{type}</Text>
+        <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
+        <TextInput
+          onChangeText={onChangeText5}
+          value={text5}
+          keyboardAppearance='dark'
+          style={styles.inputsteps}
+        />
+      </TouchableOpacity>
+    );
+    const newStretching = (
+      <TouchableOpacity key={key} style={styles.stretching}>
+        <Text style={{color: '#888', paddingLeft: 10,}}>{type}</Text>
+        <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
+        <TextInput
+          onChangeText={onChangeText6}
+          value={text6}
           keyboardAppearance='dark'
           style={styles.inputsteps}
         />
       </TouchableOpacity>
     );
     // Update the state to include the new TouchableOpacity element
-    setElements(prevElements => [...prevElements, newElement]);
+    if (type === "Rozcvička") {
+      setElements(prevElements => [...prevElements, newWarmup]);
+    } else if (type === "Cvičenie") {
+      setElements(prevElements => [...prevElements, newExercise]);
+    } else if (type === "Strečing") {
+      setElements(prevElements => [...prevElements, newStretching]);
+    }
     setAddedElements(prevElements => [...prevElements, { type, key }]);
   };
 
@@ -103,15 +140,15 @@ const MakeOwn = ({navigation}) => {
       [
         {
           text: 'Rozcvička',
-          onPress: () => addElement('Rozcvička'),
+          onPress: () => addElement("Rozcvička"),
         },
         {
           text: 'Cvičenie',
-          onPress: () => addElement('Cvičenie'),
+          onPress: () => addElement("Cvičenie"),
         },
         { 
           text: 'Strečing', 
-          onPress: () => addElement('Strečing'), 
+          onPress: () => addElement("Strečing"), 
         },
       ],
       { cancelable: true }
@@ -161,25 +198,36 @@ const MakeOwn = ({navigation}) => {
               keyboardAppearance='dark'
             />
             <Text style={{color: '#fff', paddingLeft: 10, fontWeight: 'bold', fontSize: 20}}>Kroky</Text>
+            {/* WarmUp */}
             <TouchableOpacity style={styles.warmup}>
               <Text style={{color: '#888', paddingLeft: 10,}}>Rozcvička</Text>
               <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
               <TextInput onChangeText={onChangeText1} value={text1} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
             </TouchableOpacity>
+            {/* New WarmUp */}
+            <View style={styles.content}>
+              {elements.filter(element => element.props.style === styles.warmup).map(element => element)}
+            </View>
+            {/* Exercise */}
             <TouchableOpacity style={styles.exercise}>
               <Text style={{color: '#888', paddingLeft: 10,}}>Cvičenie</Text>
               <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
               <TextInput onChangeText={onChangeText2} value={text2} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
             </TouchableOpacity>
+            {/* New Exercise */}
+            <View style={styles.content}>
+              {elements.filter(element => element.props.style === styles.exercise).map(element => element)}
+            </View>
+            {/* Streching */}
             <TouchableOpacity style={styles.stretching}>
               <Text style={{color: '#888', paddingLeft: 10,}}>Strečing</Text>
               <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
               <TextInput onChangeText={onChangeText3} value={text3} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
             </TouchableOpacity>
-          </View>
-
-          <View style={styles.content}>
-            {elements.map(element => element)}
+            {/* New Streching */}
+            <View style={styles.content}>
+              {elements.filter(element => element.props.style === styles.stretching).map(element => element)}
+            </View>
           </View>
 
           <Button 

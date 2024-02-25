@@ -4,10 +4,10 @@
     "slug": "bebetter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./images/favicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./images/favicon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -15,22 +15,30 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.matejcik24.bebetter"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.matejcik24.bebetter"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./images/favicon.png"
     },
     "extra": {
       "eas": {
         "projectId": "1f0262fe-f81d-498d-ad52-786bf925de70"
       }
     },
-    "owner": "matejcik24"
+    "owner": "matejcik24",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/1f0262fe-f81d-498d-ad52-786bf925de70"
+    }
   }
 }

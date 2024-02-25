@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const DynamicTraining = ({navigation}) => {
+const StrengthTraining = ({navigation}) => {
 
   const Separator = () => <View style={styles.separator} />;
 
@@ -733,7 +733,7 @@ const DynamicTraining = ({navigation}) => {
   );
 }
 
-export default DynamicTraining;
+export default StrengthTraining;
 
 const styles = StyleSheet.create({
   container: {

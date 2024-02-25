@@ -1,14 +1,80 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableWithoutFeedback, ScrollView, TouchableOpacity, Image, TextInput, Keyboard, Button, Alert, } from 'react-native';
+import { StyleSheet, View, Text, TouchableWithoutFeedback, ScrollView, TouchableOpacity, Image, TextInput, Keyboard, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PocketBase from 'pocketbase'; // Import PocketBase
 
-const Profile = ({navigation}) => {
+// Import AsyncAuthStore
+import AsyncAuthStore from './AsyncAuthStore'; // Adjust the path as needed
 
+const Profile = ({ navigation }) => {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
+  const [userId, setUserId] = useState('');
+
+  // Initialize an instance of AsyncAuthStore
+  const asyncAuthStore = new AsyncAuthStore();
+
+  // Initialize PocketBase with the AsyncAuthStore
+  const pb = new PocketBase('https://mathiasdb.em1t.xyz/', asyncAuthStore);
+
+  useEffect(() => {
+    // Retrieve user ID from AsyncStorage
+    retrieveUserId();
+  }, []);
   
+  useEffect(() => {
+    // Load data from AsyncStorage when the user ID changes
+    if (userId) {
+      loadData();
+    }
+  }, [userId]);
+
+  const retrieveUserId = async () => {
+    try {
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (storedUserId !== null) {
+        setUserId(storedUserId);
+      }
+    } catch (error) {
+      console.error('Error retrieving user ID:', error);
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      // Retrieve the user ID from AsyncStorage
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (storedUserId) {
+        // Query user data from the database
+        const userData = await pb.collection('users').getOne(storedUserId, {
+          "name": name,
+          "surname": surname,
+          "email": email,
+          "birthdate": dob,
+        });
+        
+        // Check if user data exists
+        if (userData) {
+          // Update the state with the fetched user data
+          setName(userData.name);
+          setSurname(userData.surname);
+          setEmail(userData.email);
+          setDob(userData.birthdate);
+        } else {
+          console.error('User data not found in database');
+        }
+      } else {
+        console.error('User ID not found in AsyncStorage');
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
+    
+    
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
@@ -26,40 +92,6 @@ const Profile = ({navigation}) => {
     ])
   };
 
-  useEffect(() => {
-    // Load data from AsyncStorage when the component mounts
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      // Load data from AsyncStorage
-      const savedData = await AsyncStorage.getItem('profileData');
-      if (savedData !== null) {
-        // Parse the JSON data
-        const { name, surname, email, dob } = JSON.parse(savedData);
-        // Set the state with the loaded data
-        setName(name);
-        setSurname(surname);
-        setEmail(email);
-        setDob(dob);
-      }
-    } catch (error) {
-      console.error('Error loading data:', error);
-    }
-  };
-
-  const saveData = async () => {
-    try {
-      // Save data to AsyncStorage
-      const data = JSON.stringify({ name, surname, email, dob });
-      await AsyncStorage.setItem('profileData', data);
-      Alert.alert('Zmeny boli uložené');
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
-  
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={dismissKeyboard}>
@@ -134,7 +166,7 @@ const Profile = ({navigation}) => {
                   <Button 
                     title="Uložiť"
                     color={'#006cff'}
-                    onPress={saveData}
+
                   />
                 </View>
                 <View>
@@ -202,5 +234,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 5,
   },
-
 })
+

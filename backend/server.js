@@ -1,49 +1,73 @@
-const express = require('express');
-const mysql = require('mysql');
+import express from 'express';
+import { PocketBase, AsyncAuthStore } from 'pocketbase';
+import { save, initial } from './authStorage'; // Importing save and initial functions from authStorage.js
 
 const app = express();
+const port = 3000;
 
-// Create a MySQL connection pool
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: '127.0.0.1',
-  user: 'root',
-  password: 'root',
-  database: 'BeBetter',
-  port: 3306
+// Initialize Auth Store for PocketBase using AsyncStorage
+const store = new AsyncAuthStore({
+  save: save,
+  initial: initial,
 });
+
+// Initialize PocketBase instance
+const pb = new PocketBase('https://mathiasdb.em1t.xyz/', store);
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Login route
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
+// Route to handle user signup
+app.post('/signup', async (req, res) => {
+  const { username, email, password } = req.body;
 
-  // Validate input
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Je potrebné zadať email a heslo' });
+  try {
+    // Check if user already exists
+    const existingUser = await pb.collection('users').findOne({ username });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Create a new user in PocketBase
+    const newUser = await pb.collection('users').create({
+      username,
+      email,
+      password,
+    });
+
+    // Return success response
+    res.status(200).json({ message: 'Signup successful', user: newUser });
+  } catch (error) {
+    console.error('Error signing up:', error);
+    // Return error response
+    res.status(500).json({ message: 'Signup failed', error: error.message });
   }
+});
 
-  // Perform database query
-  pool.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (error, results) => {
-    if (error) {
-      console.error('Database error:', error);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
+// Route to handle user login
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
 
-    if (results.length > 0) {
-      // User found, login successful
-      res.json({ success: true });
+  try {
+    // Find user by username and password
+    const user = await pb.collection('users').findOne({ username, password });
+
+    if (user) {
+      // Return success response
+      res.status(200).json({ message: 'Login successful', user });
     } else {
-      // User not found or incorrect password
-      res.status(401).json({ error: 'Invalid credentials' });
+      // Return error response if user not found or invalid credentials
+      res.status(401).json({ message: 'Invalid username or password' });
     }
-  });
+  } catch (error) {
+    console.error('Error logging in:', error);
+    // Return error response
+    res.status(500).json({ message: 'Login failed', error: error.message });
+  }
 });
 
 // Start the server
-const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });

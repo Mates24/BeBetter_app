@@ -1,32 +1,32 @@
 import React, { useState } from 'react';
 import { View, Text, SafeAreaView, TextInput, Button, Image, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import PocketBase from 'pocketbase'; // Import PocketBase
 
 const LogIn = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://192.168.0.154:3306', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-      
-      if (response.ok) {
-        // Handle successful login, e.g., navigate to the home screen
-        navigation.navigate('Home');
+      const pb = new PocketBase('https://mathiasdb.em1t.xyz/'); // Initialize PocketBase with your API URL
+      const userData = await pb.collection('users').authWithPassword(email, password); // Authenticate user with email and password
+  
+      // If authentication is successful, navigate to the home screen and store the user ID in AsyncStorage
+      if (userData) {
+        // Store the user ID in AsyncStorage
+        await AsyncStorage.setItem('userId', userData.record.id);
+        navigation.navigate('Home', { userId: userData.record.id });
       } else {
         // Handle unsuccessful login, e.g., display an error message
-        Alert.alert('Prihlasovanie zlyhalo');
+        Alert.alert('Chyba pri prihlasovaní', 'Nesprávny email alebo heslo');
       }
     } catch (error) {
-      Alert.alert('Vyskytla sa chyba:', error);
+      // Handle other errors, e.g., network issues
+      console.log('Error occurred:', error);
+      Alert.alert('Error', 'Nastala chyba. Skúste to znova neskôr.');
     }
   };
 
@@ -38,9 +38,9 @@ const LogIn = ({ navigation }) => {
         </View>
         <View  style={{flex: 1, justifyContent: 'center', width: '80%',}}>
           <View>
-            <Text style={styles.labels}>Prihlasovací e-mail:</Text>
+            <Text style={styles.labels}>Email:</Text>
             <TextInput
-              placeholder='E-mail'
+              placeholder='Email'
               keyboardAppearance='dark'
               placeholderTextColor={'#888'}
               backgroundColor={'#333'}
@@ -52,10 +52,10 @@ const LogIn = ({ navigation }) => {
               style={{fontSize: 20, height: 40, paddingLeft: 10, borderRadius: 10, marginTop: 5}}/>
           </View>
           <View style={{paddingTop: 15}}>
-            <Text style={styles.labels}>Heslo:</Text>
+            <Text style={styles.labels}>Password:</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', backgroundColor: '#333', borderRadius: 10, justifyContent: 'space-between', paddingRight: 10, marginTop: 5,}}>
               <TextInput
-                placeholder='Heslo'
+                placeholder='Password'
                 keyboardAppearance='dark'
                 placeholderTextColor={'#888'}
                 backgroundColor={'#333'}
@@ -73,16 +73,16 @@ const LogIn = ({ navigation }) => {
             </View>
             <View style={{marginTop: 15,}}>
               <Button 
-                title='Prihlásiť sa'
+                title='Login'
                 color={'#006cff'}
                 onPress={handleLogin}
               />
             </View>
           </View>
           <View style={{position: 'absolute', bottom: 0, left: '14%', flexDirection: 'row', gap: 10,}}>
-            <Text style={{color: '#fff', textAlign: 'center',}}>Ešte nemáte účet?</Text>
+            <Text style={{color: '#fff', textAlign: 'center',}}>Don't have an account yet?</Text>
             <TouchableOpacity onPress={ () => navigation.navigate("SignUp")}>
-              <Text style={{color: 'red', paddingBottom: 0,}}>Registrovať sa</Text>
+              <Text style={{color: 'red', paddingBottom: 0,}}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
