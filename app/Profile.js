@@ -23,7 +23,7 @@ const Profile = ({ navigation }) => {
     // Retrieve user ID from AsyncStorage
     retrieveUserId();
   }, []);
-
+  
   useEffect(() => {
     // Load data from AsyncStorage when the user ID changes
     if (userId) {
@@ -48,8 +48,11 @@ const Profile = ({ navigation }) => {
       const storedUserId = await AsyncStorage.getItem('userId');
       if (storedUserId) {
         // Query user data from the database
-        const userData = await pb.collection('users').getOne(storedUserId);
-        
+        const userData = await pb.collection('users').getOne(storedUserId, {
+          expand: 'name,surname,email,birthdate', // Specify the fields to expand
+          fields: '*', // Retrieve all fields
+        });
+  
         // Check if user data exists
         if (userData) {
           // Update the state with the fetched user data
@@ -67,42 +70,11 @@ const Profile = ({ navigation }) => {
       console.error('Error loading data:', error);
     }
   };
-
-  const saveData = async () => {
-    try {
-      // Save updated user data to the database
-      await pb.collection('users').update(userId, {
-        name: name,
-        surname: surname,
-        email: email,
-        birthdate: dob,
-      });
-      Alert.alert('Data saved successfully');
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
-
-  const dismissKeyboard = () => {
-    Keyboard.dismiss();
-  };
-
-  const LogOutButton = () => {
-    Alert.alert('Odhlásanie bolo úspešné', '', [
-      {
-        text: 'Prihlásiť sa',
-        onPress: () => navigation.navigate('LogIn'),
-      },
-      {
-        text: 'Zrušiť', onPress: () => navigation.navigate('Introduction'),
-        style: 'cancel',
-      },
-    ])
-  };
+  
 
   return (
     <View style={styles.container}>
-      <TouchableWithoutFeedback onPress={dismissKeyboard}>
+      <TouchableWithoutFeedback>
         <ScrollView scrollEnabled={false}>
           <View style={styles.header}>
             <TouchableOpacity onPress={ () => navigation.navigate("Home")} style={styles.backbtn}>
@@ -127,7 +99,6 @@ const Profile = ({ navigation }) => {
                     style={styles.profileinputs}
                     value={name}
                     onChangeText={setName}
-                    onBlur={saveData} // Trigger saveData when input is blurred
                   />
                 </View>
                 <View style={styles.infosections}>
@@ -141,7 +112,6 @@ const Profile = ({ navigation }) => {
                     style={styles.profileinputs}
                     value={surname}
                     onChangeText={setSurname}
-                    onBlur={saveData} // Trigger saveData when input is blurred
                   />
                 </View>
                 <View style={styles.infosections}>
@@ -155,7 +125,6 @@ const Profile = ({ navigation }) => {
                     style={styles.profileinputs}
                     value={email}
                     onChangeText={setEmail}
-                    onBlur={saveData} // Trigger saveData when input is blurred
                   />
                 </View>
                 <View style={styles.infosections}>
@@ -169,7 +138,6 @@ const Profile = ({ navigation }) => {
                     style={styles.profileinputs}
                     value={dob}
                     onChangeText={setDob}
-                    onBlur={saveData} // Trigger saveData when input is blurred
                   />
                 </View>
               </View>
@@ -178,14 +146,12 @@ const Profile = ({ navigation }) => {
                   <Button 
                     title="Uložiť"
                     color={'#006cff'}
-                    onPress={saveData} // Trigger saveData when the "Uložiť" button is pressed
                   />
                 </View>
                 <View>
                   <Button 
                     title="Odhlásiť sa"
                     color={'red'}
-                    onPress={LogOutButton}
                   />
                 </View>
               </View>
