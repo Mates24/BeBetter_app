@@ -14,18 +14,23 @@ import {
   ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PocketBase from 'pocketbase';
+
+const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
 
 const MakeOwn = ({ navigation }) => {
   const [elements, setElements] = useState([]);
   const [addedElements, setAddedElements] = useState([]);
 
-  const [text1, onChangeText1] = React.useState('Čas trvania: min');
-  const [text2, onChangeText2] = React.useState('Počet op.: ');
-  const [text3, onChangeText3] = React.useState('Čas trvania: min');
+  const [text1, onChangeText1] = useState('Čas trvania: min');
+  const [text2, onChangeText2] = useState('Počet op.: ');
+  const [text3, onChangeText3] = useState('Čas trvania: min');
 
-  const [text4, onChangeText4] = React.useState('Čas trvania: min');
-  const [text5, onChangeText5] = React.useState('Počet op.: ');
-  const [text6, onChangeText6] = React.useState('Čas trvania: min');
+  const [text4, onChangeText4] = useState('Čas trvania: min');
+  const [text5, onChangeText5] = useState('Počet op.: ');
+  const [text6, onChangeText6] = useState('Čas trvania: min');
+
+  const [userId, setUserId] = useState('');
 
   const Separator = () => <View style={styles.separator} />;
 
@@ -35,15 +40,39 @@ const MakeOwn = ({ navigation }) => {
 
   const [programName, setProgramName] = useState('Názov');
   const [program, setProgram] = useState('');
+  const [recordID, setRecordID] = useState('');
+
+  const retrieveUserId = async () => {
+    try {
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (storedUserId !== null) {
+        setUserId(storedUserId);
+      }
+    } catch (error) {
+      console.error('Error retrieving user ID:', error);
+    }
+  };
 
   useEffect(() => {
     // Load the saved program when the component mounts
     loadProgram();
+    // Generate record ID when the component mounts
+    generateRecordID();
   }, []);
+  useEffect(() => {
+    // Retrieve user ID from AsyncStorage
+    retrieveUserId();
+  }, []);
+
+  const generateRecordID = async () => {
+    // Generate a unique record ID (you can use any method you prefer)
+    const id = Math.random().toString(36).substring(7);
+    setRecordID(id);
+  };
 
   const loadProgram = async () => {
     try {
-      const savedScreen = await AsyncStorage.getItem('saved_screen');
+      const savedScreen = await AsyncStorage.getItem('saved_screens');
       if (savedScreen !== null) {
         const { savedProgramName, savedProgramContent } = JSON.parse(savedScreen);
         setProgramName(savedProgramName);
@@ -54,26 +83,40 @@ const MakeOwn = ({ navigation }) => {
     }
   };
 
+
   const saveScreen = async () => {
     try {
+      const storedUserId = await AsyncStorage.getItem('userId');
       const screenData = JSON.stringify({
+        userID: userId,
         savedProgramName: programName,
         savedProgramContent: program,
         addedElements: addedElements,
         elements: elements.map(element => element.props.children)
       });
-      await AsyncStorage.setItem('saved_screen', screenData);
+      
+      // Save to PocketBase database
+      const data = {
+        "recordID": recordID,
+        "userID": storedUserId, // Updated to use storedUserId
+        "savedProgramName": programName,
+        "savedProgramContent": program,
+        "elements": screenData
+      };
+
+      await pb.collection('saved_screens').update(data);
+      
+      // Alert user
       Alert.alert('Tréning bol úspešne uložený');
     } catch (error) {
       console.error('Error saving screen:', error);
       Alert.alert('Chyba pri ukladaní:', error.message);
     }
   };
-                
 
   const deleteScreen = async () => {
     try {
-      await AsyncStorage.removeItem('saved_screen');
+      await AsyncStorage.removeItem('saved_screens');
       setProgram('');
       setProgramName('Názov');
       Alert.alert('Tréning bol úspešne vymazaný');
@@ -212,7 +255,7 @@ const MakeOwn = ({ navigation }) => {
             <TouchableOpacity style={styles.exercise}>
               <Text style={{color: '#888', paddingLeft: 10,}}>Cvičenie</Text>
               <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
-              <TextInput onChangeText={onChangeText2} value={text2} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
+              <TextInput onChangeText={onChangeText5} value={text2} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
             </TouchableOpacity>
             {/* New Exercise */}
             <View style={styles.content}>
@@ -290,27 +333,27 @@ const styles = StyleSheet.create({
   },
 
   warmup: {
-    height: 70,
     margin: 10,
     paddingTop: 5,
+    paddingBottom: 5,
     borderWidth: 1,
     borderStartWidth: 7,
     borderRadius: 12,
     borderColor: 'red',
   },
   exercise: {
-    height: 70,
     margin: 10,
     paddingTop: 5,
+    paddingBottom: 5,
     borderWidth: 1,
     borderStartWidth: 7,
     borderRadius: 12,
     borderColor: 'blue',
   },
   stretching: {
-    height: 70,
     margin: 10,
     paddingTop: 5,
+    paddingBottom: 5,
     borderWidth: 1,
     borderStartWidth: 7,
     borderRadius: 12,
