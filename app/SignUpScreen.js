@@ -60,9 +60,9 @@ const SignUp = ({ navigation }) => {
         </View>
         <View style={{ flex: 1, justifyContent: 'center', width: '80%' }}>
           <View>
-            <Text style={styles.labels}>Username:</Text>
+            <Text style={styles.labels}>Meno:</Text>
             <TextInput
-              placeholder='Username'
+              placeholder='Meno'
               keyboardAppearance='dark'
               placeholderTextColor='#888'
               backgroundColor='#333'
@@ -89,10 +89,10 @@ const SignUp = ({ navigation }) => {
             />
           </View>
           <View style={{ paddingTop: 15 }}>
-            <Text style={styles.labels}>Password:</Text>
+            <Text style={styles.labels}>Heslo:</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#333', borderRadius: 10, justifyContent: 'space-between', paddingRight: 10, marginTop: 5 }}>
               <TextInput
-                placeholder='Password'
+                placeholder='Heslo'
                 keyboardAppearance='dark'
                 placeholderTextColor='#888'
                 backgroundColor='#333'
@@ -110,10 +110,10 @@ const SignUp = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View style={{ paddingTop: 15 }}>
-              <Text style={styles.labels}>Confirm Password:</Text>
+              <Text style={styles.labels}>Potrvďte heslo:</Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#333', borderRadius: 10, justifyContent: 'space-between', paddingRight: 10, marginTop: 5 }}>
                 <TextInput
-                  placeholder='Confirm Password'
+                  placeholder='Heslo'
                   keyboardAppearance='dark'
                   placeholderTextColor='#888'
                   backgroundColor='#333'
@@ -132,7 +132,7 @@ const SignUp = ({ navigation }) => {
               </View>
               <View style={{ marginTop: 15 }}>
                 <Button
-                  title='Sign Up'
+                  title='Registrovať sa'
                   color='#006cff'
                   onPress={handleSignUp}
                 />
@@ -140,9 +140,9 @@ const SignUp = ({ navigation }) => {
             </View>
           </View>
           <View style={{ position: 'absolute', bottom: 0, left: '21.5%', flexDirection: 'row', gap: 10 }}>
-            <Text style={{ color: '#fff', textAlign: 'center' }}>Already have an account?</Text>
+            <Text style={{ color: '#fff', textAlign: 'center' }}>Už máte účet?</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-              <Text style={{ color: 'red', paddingBottom: 0 }}>Log In</Text>
+              <Text style={{ color: 'red', paddingBottom: 0 }}>Prihlásiť sa</Text>
             </TouchableOpacity>
           </View>
         </View>

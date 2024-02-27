@@ -55,7 +55,7 @@ const LogIn = ({ navigation }) => {
             <Text style={styles.labels}>Password:</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', backgroundColor: '#333', borderRadius: 10, justifyContent: 'space-between', paddingRight: 10, marginTop: 5,}}>
               <TextInput
-                placeholder='Password'
+                placeholder='Heslo'
                 keyboardAppearance='dark'
                 placeholderTextColor={'#888'}
                 backgroundColor={'#333'}
@@ -73,16 +73,16 @@ const LogIn = ({ navigation }) => {
             </View>
             <View style={{marginTop: 15,}}>
               <Button 
-                title='Login'
+                title='Prihlásiť sa'
                 color={'#006cff'}
                 onPress={handleLogin}
               />
             </View>
           </View>
           <View style={{position: 'absolute', bottom: 0, left: '14%', flexDirection: 'row', gap: 10,}}>
-            <Text style={{color: '#fff', textAlign: 'center',}}>Don't have an account yet?</Text>
-            <TouchableOpacity onPress={ () => navigation.navigate("Home")}>
-              <Text style={{color: 'red', paddingBottom: 0,}}>Sign Up</Text>
+            <Text style={{color: '#fff', textAlign: 'center',}}>Ešte nemáte účet?</Text>
+            <TouchableOpacity onPress={ () => navigation.navigate("SignUp")}>
+              <Text style={{color: 'red', paddingBottom: 0,}}>Registrovať sa</Text>
             </TouchableOpacity>
           </View>
         </View>
