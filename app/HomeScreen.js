@@ -29,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
 
   const fetchUserName = async () => {
     try {
-      const pb = new PocketBase('https://mathiasdb.em1t.xyz/'); // Replace with your PocketBase endpoint
+      const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
       const userToken = await pb.getAuthToken();
       if (userToken) {
         const userData = await pb.collection('users').findOne({ token: userToken });

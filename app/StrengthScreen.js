@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Video, ResizeMode } from 'expo-av';
+/* import { Video, ResizeMode } from 'expo-av'; */
 import { 
   SafeAreaView, 
   StyleSheet, 
@@ -51,19 +51,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Drepy s osou',
               op: 'Počet op.: 5',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Mŕtvy ťah',
               op: 'Počet op.: 5',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Bulharské drepy',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -91,19 +91,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 5',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové kliky na bradlách',
               op: 'Počet op.: 3x do zlyhania',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Príťahy s osou na chrbát',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -131,19 +131,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 5',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové kliky na bradlách',
               op: 'Počet op.: 3x do zlyhania',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Príťahy s osou na chrbát',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -171,19 +171,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Drepy s osou (vysoká váha a nízky počet opakovaná na získanie sily)',
               op: 'Počet op.: 5x3',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Mŕtvy ťah',
               op: 'Počet op.: 5x3',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Výpady s jednoručkami',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -211,19 +211,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové výpony s jednoručnou činkou',
               op: 'Počet op.: 3x12-15',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Zhyby na hrazde',
               op: 'Počet op.: 3x do svalového zlyhania',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -257,19 +257,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Drepy s osou',
               op: 'Počet op.: 5x3',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Mŕtvy ťah',
               op: 'Počet op.: 5x3',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Rumunský mŕtvy ťah',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -297,19 +297,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 4x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové kliky na bradlách',
               op: 'Počet op.: 3x10-12',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Príťahy s osou na chrbát',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -337,19 +337,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 5',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové kliky na bradlách',
               op: 'Počet op.: 3x do zlyhania',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Príťahy s osou na chrbát',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -377,19 +377,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Drepy s osou (90% osobného maxima)',
               op: 'Počet op.: 6x2',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Mŕtvy ťah (90% osobného maxima)',
               op: 'Počet op.: 6x2',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Výpady s jednoručkami',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -417,19 +417,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové výpony s jednoručnou činkou',
               op: 'Počet op.: 3x12-15',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Zhyby na hrazde',
               op: 'Počet op.: 3x maximálny počet opakovaní',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -462,19 +462,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Drepy s osou (90% osobného maxima)',
               op: 'Počet op.: 6x2',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Mŕtvy ťah (90% osobného maxima)',
               op: 'Počet op.: 6x2',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Rumunský mŕtvy ťah',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -502,19 +502,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové kliky na bradlách',
               op: 'Počet op.: 3x do svalového zlyhania',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Príťahy s osou na chrbát',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -542,19 +542,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 5',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové kliky na bradlách',
               op: 'Počet op.: 3x do zlyhania',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Príťahy s osou na chrbát',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -582,19 +582,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Drepy s osou',
               op: 'Počet op.: 5x3',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Mŕtvy ťah',
               op: 'Počet op.: 5x3',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Výpady s jednoručkami',
               op: 'Počet op.: 3x8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [
@@ -622,19 +622,19 @@ const StrengthTraining = ({navigation}) => {
               name: 'Cvičenie 1',
               description: 'Bench Press',
               op: 'Počet op.: 8-10',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 2',
               description: 'Tricepsové výpony s jednoručnou činkou',
               op: 'Počet op.: 3x12-15',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
             {
               name: 'Cvičenie 3',
               description: 'Zhyby na hrazde',
               op: 'Počet op.: 3x maximálny počet opakovaní',
-              videoSource: 'https://www.example.com/video2.mp4',
+              /* videoSource: 'https://www.example.com/video2.mp4', */
             },
           ],
           stretching: [

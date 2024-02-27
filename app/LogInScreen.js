@@ -81,7 +81,7 @@ const LogIn = ({ navigation }) => {
           </View>
           <View style={{position: 'absolute', bottom: 0, left: '14%', flexDirection: 'row', gap: 10,}}>
             <Text style={{color: '#fff', textAlign: 'center',}}>Don't have an account yet?</Text>
-            <TouchableOpacity onPress={ () => navigation.navigate("SignUp")}>
+            <TouchableOpacity onPress={ () => navigation.navigate("Home")}>
               <Text style={{color: 'red', paddingBottom: 0,}}>Sign Up</Text>
             </TouchableOpacity>
           </View>

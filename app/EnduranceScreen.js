@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Video, ResizeMode } from 'expo-av';
+/* import { Video, ResizeMode } from 'expo-av'; */
 import { 
   SafeAreaView, 
   StyleSheet, 
@@ -12,7 +12,7 @@ import {
   ScrollView,
 } from 'react-native';
 
-const DynamicTraining = ({navigation}) => {
+const StrengthTraining = ({navigation}) => {
 
   const Separator = () => <View style={styles.separator} />;
 
@@ -22,228 +22,435 @@ const DynamicTraining = ({navigation}) => {
 
   const switchPlan = (index) => {
     setSelectedPlanIndex(index);
+    setSelectedDayPlanIndex(0);
   };
+
+  const switchDayPlan = (index) => {
+    setSelectedDayPlanIndex(index);
+  };
+
   const [selectedPlanIndex, setSelectedPlanIndex] = useState(0);
+  const [selectedDayPlanIndex, setSelectedDayPlanIndex] = useState(0);
 
   const plans = [
     {
       name: 'Plán 1',
-      info: [
+      days: [
         {
-          series: '4',
-          break: '75 sekúnd',
-          equipment: 'bedna',
-        }
-      ],
-      warmup: [ 
-        {
-          name: 'Rozcvička',
-          description: 'Švihadlo',
-          duration: 'Čas trvania: 15min',
-        }
-      ],
-      exercises: [
-        {
-          name: 'Cvičenie 1',
-          description: 'Skok vzad s následným vertikálnym výskokom',
-          op: 'Počet op.: 8-10',
-          videoSource: 'https://www.example.com/video1.mp4',
+          name: 'Deň 1',
+          warmup: [
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define warm-up exercises for Day 1
+            {
+              name: 'Cvičenie 1',
+              description: '15-sekundový intervalový beh na 70m',
+              op: 'Počet op.: 3x8',
+              break: 'Pauza: 40 sekúnd',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Plank na predlaktiach',
+              op: 'Počet sérií: 3',
+              break: 'Čas trvania: 90 sekúnd',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Sklapovačky',
+              op: 'Počet sérií: 3',
+              break: 'Čas trvania: 45 sekúnd',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 1
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
         {
-          name: 'Cvičenie 2',
-          description: 'Plyometrické kliky',
-          op: 'Počet op.: 8-10',
-          videoSource: 'https://www.example.com/video1.mp4',
+          name: 'Deň 2',
+          warmup: [
+            // Define warm-up exercises for Day 2
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define exercises for Day 2
+            {
+              name: 'Cvičenie 1',
+              description: '15-sekundový intervalový beh na 70m',
+              op: 'Počet op.: 3x10',
+              break: 'Pauza: 40 sekúnd',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Bočný plank',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Ab wheel',
+              op: 'Počet sérií: 3',
+              break: 'Čas trvania: 45 sekúnd',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 2
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
         {
-          name: 'Cvičenie 3',
-          description: 'Kliky s následným križným dotykom kolena a lakťa',
-          op: 'Počet op.: 8-10',
-          videoSource: 'https://www.example.com/video1.mp4',
+          name: 'Deň 3',
+          warmup: [
+            // Define warm-up exercises for Day 3
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define exercises for Day 3
+            {
+              name: 'Cvičenie 1',
+              description: '15-sekundový intervalový beh na 70m',
+              op: 'Počet op.: 4x8',
+              break: 'Pauza: 40 sekúnd',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Plank na predlaktiach',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Sklapovačky',
+              break: 'Čas trvania: 45 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 3
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
         {
-          name: 'Cvičenie 4',
-          description: 'Dvíhanie panvy s jednou nohou vo vzduchu',
-          op: 'Počet op.: 6-8',
-          videoSource: 'https://www.example.com/video1.mp4',
+          name: 'Deň 4',
+          warmup: [
+            // Define warm-up exercises for Day 4
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define exercises for Day 4
+            {
+              name: 'Cvičenie 1',
+              description: '15-sekundový intervalový beh na 70m',
+              op: 'Počet op.: 4x10',
+              break: 'Pauza: 40 sekúnd',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Bočný plank',
+              op: 'Počet sérií: 3',
+              break: 'Čas trvania: 90 sekúnd',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Ab wheel',
+              op: 'Počet sérií: 3',
+              break: 'Čas trvania: 45 sekúnd',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 4
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
-        {
-          name: 'Cvičenie 5',
-          description: 'Skok do diaľky z miesta',
-          op: 'Počet op.: 10',
-          videoSource: 'https://www.example.com/video1.mp4',
-        },
-        {
-          name: 'Cvičenie 6',
-          description: 'Angličáky bez kliku',
-          op: 'Počet op.: 10',
-          videoSource: 'https://www.example.com/video1.mp4',
-        },
-        {
-          name: 'Cvičenie 7',
-          description: 'Výskoky na bednu',
-          op: 'Počet op.: 8-10',
-          videoSource: 'https://www.example.com/video1.mp4',
-        },
-        {
-          name: 'Cvičenie 8',
-          description: 'Tri skoky do diaľky za sebou',
-          op: 'Počet op.: 6-8',
-          videoSource: 'https://www.example.com/video1.mp4',
-        },
-        {
-          name: 'Cvičenie 9',
-          description: '1x horolezec s následným šprintom na 20 metrov',
-          op: 'Počet op.: 6-8',
-          videoSource: 'https://www.example.com/video1.mp4',
-        },
-      ],
-      stretching: [
-        {
-          name: 'Strečing',
-          description: 'Aktívne naťahovanie',
-          duration: 'Čas trvania: 10min',
-        }
-      ],
+      ]
     },
+
+    // Plán na druhý týždeň
     {
       name: 'Plán 2',
-      info: [
+      days: [
         {
-          series: '3',
-          break: '90 sekúnd',
-          equipment: 'medicinbal',
-        }
-      ],
-      warmup: [{
-        name: 'Rozcvička',
-        description: 'Beh na 2km',
-        duration: 'Čas trvania: 15min',
-      }],
-      exercises: [
-        {
-          name: 'Cvičenie 1',
-          description: 'Výskoky z výpadu: snažiť sa dopadnúť do výpadu, nezabudnúť na striedanie nôh',
-          op: 'Počet op.: 3-5',
-          videoSource: 'https://www.example.com/video2.mp4',
+          name: 'Deň 1',
+          warmup: [
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define warm-up exercises for Day 1
+            {
+              name: 'Cvičenie 1',
+              description: 'Pyramída behu (5×70m, 5×77m, 10×84m, 5×77m, 5×70m)',
+              op: 'Počet sérií: 3',
+              break: 'Pauza medzi sériami: 4min',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Plank na predlaktiach',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Sklapovačky',
+              break: 'Čas trvania: 45 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 1
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
         {
-          name: 'Cvičenie 2',
-          description: 'Plank na predlaktiach',
-          op: 'Čas trvania: 60s',
-          videoSource: 'https://www.example.com/video2.mp4',
+          name: 'Deň 2',
+          warmup: [
+            // Define warm-up exercises for Day 2
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define exercises for Day 2
+            {
+              name: 'Cvičenie 1',
+              description: 'Pyramída behu (5×70m, 5×77m, 10×84m, 5×77m, 5×70m)',
+              op: 'Počet sérií.: 3',
+              break: 'Pauza medzi sériami: 4min',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Bočný plank',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Ab wheel',
+              break: 'Čas trvania: 45 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 2
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
         {
-          name: 'Cvičenie 3',
-          description: 'Výskoky na vystretých nohách',
-          op: 'Počet op.: 8-10',
-          videoSource: 'https://www.example.com/video2.mp4',
+          name: 'Deň 3',
+          warmup: [
+            // Define warm-up exercises for Day 3
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define exercises for Day 3
+            {
+              name: 'Cvičenie 1',
+              description: 'Pyramída behu (5×70m, 5×77m, 10×84m, 5×77m, 5×70m)',
+              op: 'Počet sérií.: 3',
+              break: 'Pauza medzi sériami: 4min',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Plank na predlaktiach',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Sklapovačky',
+              break: 'Čas trvania: 45 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 3
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
-        {
-          name: 'Cvičenie 4',
-          description: 'Šprinty z jedného kolena: 15 metrov,  striedať nohy v začiatočnej polohe',
-          op: 'Počet op.: 8',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        {
-          name: 'Cvičenie 5',
-          description: 'Beh vzad s následným šprintom vpred (beh vzad na 5 metrov, šprint na 15 metrov)',
-          op: 'Počet op.: 3x4',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        {
-          name: 'Cvičenie 6',
-          description: 'Dod medicinbalu od hrude s výskokom vpred',
-          op: 'Počet op.: 3x15',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        // Add more exercises as needed
-      ],
-      stretching: [{
-        name: 'Strečing',
-        description: 'Výbeh',
-        duration: 'Čas trvania: 10min',
-      }],
+      ]
     },
-    // Add more plans as needed
     {
       name: 'Plán 3',
-      info: [
-        {          
-          series: '3 (pri niektorých cvičeniach počet sérií v popise cvičenia)',
-          break: '75 sekúnd',
-          equipment: 'kettlbell, bedna, prekážky',
-        }
-      ],
-      warmup: [{
-        name: 'Rozcvička',
-        description: 'Švihadlo',
-        duration: 'Čas trvania: 20min',
-      }],
-      exercises: [
+      days: [
         {
-          name: 'Cvičenie 1',
-          description: 'Šprint na 20 metrov',
-          op: 'Počet op.: 5',
-          videoSource: 'https://www.example.com/video2.mp4',
+          name: 'Deň 1',
+          warmup: [
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define warm-up exercises for Day 1
+            {
+              name: 'Cvičenie 1',
+              description: 'Pyramída behu (5×47m, 5×52m, 10×56m, 5×52m, 5×47m)',
+              op: 'Počet sérií.: 3',
+              break: 'Pauza medzi sériami: 3min',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Bočný plank',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Ab wheel',
+              op: 'Počet sérií: 3',
+              break: 'Čas trvania: 45 sekúnd',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 1
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
         {
-          name: 'Cvičenie 2',
-          description: 'dvojitý skok do diaľky s následným šprintom na 10 metrov',
-          op: 'Počet op.: 5',
-          videoSource: 'https://www.example.com/video2.mp4',
+          name: 'Deň 2',
+          warmup: [
+            // Define warm-up exercises for Day 2
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define exercises for Day 2
+            {
+              name: 'Cvičenie 1',
+              description: 'Pyramída behu (5×70m, 5×77m, 10×84m, 5×77m, 5×70m)',
+              op: 'Počet sérií.: 3',
+              break: 'Pauza medzi sériami: 3min',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Plank na predlaktiach',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Sklapovačky',
+              break: 'Čas trvania: 45 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 2
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
         {
-          name: 'Cvičenie 3',
-          description: 'Kettlebell swings',
-          op: 'Počet op.: 5x12 švihov',
-          videoSource: 'https://www.example.com/video2.mp4',
+          name: 'Deň 3',
+          warmup: [
+            // Define warm-up exercises for Day 3
+            {
+              name: 'Rozcvička',
+              description: 'Švihadlo',
+              duration: 'Čas trvania: 15min',
+            }
+          ],
+          exercises: [
+            // Define exercises for Day 3
+            {
+              name: 'Cvičenie 1',
+              description: 'Pyramída behu (5×70m, 5×77m, 10×84m, 5×77m, 5×70m)',
+              op: 'Počet sérií.: 3',
+              break: 'Pauza medzi sériami: 3min',
+            },
+            {
+              name: 'Cvičenie 2',
+              description: 'Bočný plank',
+              break: 'Čas trvania: 90 sekúnd',
+              op: 'Počet sérií: 3',
+            },
+            {
+              name: 'Cvičenie 3',
+              description: 'Ab wheel',
+              op: 'Počet sérií: 3',
+              break: 'Čas trvania: 45 sekúnd',
+            },
+          ],
+          stretching: [
+            // Define stretching exercises for Day 3
+            {
+              name: 'Strečing',
+              description: 'Aktívne naťahovanie',
+              duration: 'Čas trvania: 10min',
+            }
+          ],
         },
-        {
-          name: 'Cvičenie 4',
-          description: 'Výskoky na bednu so závažím',
-          op: 'Počet op.: 6-8',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        {
-          name: 'Cvičenie 5',
-          description: 'Výstupy na bednu so švihnutím nohy',
-          op: 'Počet op.: 6-8',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        {
-          name: 'Cvičenie 6',
-          description: 'Šprint zo sedu',
-          op: 'Počet op.: 6',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        {
-          name: 'Cvičenie 7',
-          description: 'Preskoky vpred cez prekážky (po doskoku vydržať v podrepe 2 sekundy)',
-          op: 'Počet op.: 5x3',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        {
-          name: 'Cvičenie 8',
-          description: 'Preskoky bokom cez prekážky (po doskoku vydržať v podrepe 2 sekundy)',
-          op: 'Počet op.: 3x3 (na každú stranu)',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        {
-          name: 'Cvičenie 9',
-          description: 'Výskoky na bednu bokom',
-          op: 'Počet op.: 6-8',
-          videoSource: 'https://www.example.com/video2.mp4',
-        },
-        // Add more exercises as needed
-      ],
-      stretching: [{
-        name: 'Strečing',
-        description: 'Masážny valec',
-        duration: 'Čas trvania: 15min',
-      }],
+      ]
     },
   ];
+
+  const selectedPlan = plans[selectedPlanIndex];
+  const selectedDayPlan = selectedPlan.days[selectedDayPlanIndex];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -252,67 +459,62 @@ const DynamicTraining = ({navigation}) => {
           <View style={styles.header}>
             <TouchableOpacity onPress={ () => navigation.navigate("Home")} style={styles.backbtn}>
               <Image source={require('../images/arrowL.png')} style={{height: 14, width: 14,}}/>
-              <Text style={{color: '#006cff', fontSize: 16,}}>Späť</Text>
+              <Text style={{color: '#006cff', fontSize: 16,}}>Back</Text>
             </TouchableOpacity>
             <Text style={styles.heading}>Vytrvalosť</Text>
           </View>
           <Separator/>
-          <View style={styles.plans}>
+          <View>
             <View style={styles.planswitch}>
               <TouchableOpacity onPress={() => switchPlan((selectedPlanIndex - 1 + plans.length) % plans.length)}>
                 <Image source={require('../images/arrowL.png')} style={{height: 20, width: 20,}}/>
               </TouchableOpacity>
-              <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20,}}>{plans[selectedPlanIndex].name}</Text>
+              <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 20,}}>{selectedPlan.name}</Text>
               <TouchableOpacity onPress={() => switchPlan((selectedPlanIndex + 1) % plans.length)}>
                 <Image source={require('../images/arrowR.png')} style={{height: 20, width: 20,}}/>
               </TouchableOpacity>
             </View>
-            <View style={styles.plans}>
-              {plans[selectedPlanIndex].info.map((info, index) => (
-                <View style={{ margin: 10, borderWidth: 1, borderColor: '#555', padding: 10, }} key={index}>
-                  <Text style={{color: '#fff', fontSize: 16,}}>
-                    <Text style={{fontWeight: 'bold',}}>Počet sérií: </Text>{info.series}
-                  </Text>
-                  <Text style={{color: '#fff', fontSize: 16,}}>
-                    <Text style={{fontWeight: 'bold',}}>Pauza medzi sériami: </Text>{info.break}</Text>
-                  <Text style={{color: '#fff', fontSize: 16,}}>
-                    <Text style={{fontWeight: 'bold',}}>Pomôcky: </Text>{info.equipment}</Text>
+            <View>
+              {selectedDayPlan && (
+                <View>
+                  <Text style={{ color: '#fff', paddingLeft: 10, fontWeight: 'bold', fontSize: 20 }}>Denný plán</Text>
+                  <ScrollView horizontal style={{marginHorizontal: 5}}>
+                    {selectedPlan.days.map((day, index) => (
+                      <TouchableOpacity key={index} onPress={() => switchDayPlan(index)} style={[styles.dayButton, selectedDayPlanIndex === index && styles.selectedDayButton]}>
+                        <Text style={{color: '#fff'}}>{day.name}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
                 </View>
-              ))}
-              <Text style={{ color: '#fff', paddingLeft: 10, fontWeight: 'bold', fontSize: 20 }}>Kroky</Text>
-              {plans[selectedPlanIndex].warmup.map((warmup, index) => (
+              )}
+              {/* Render warm-up exercises */}
+              {selectedDayPlan && selectedDayPlan.warmup.map((exercise, index) => (
                 <View style={styles.warmup} key={index}>
                   <View style={{ gap: 5, }}>
-                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10 }}>{warmup.name}</Text>
-                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10, fontSize: 17, fontWeight: 'bold' }}>{warmup.description}</Text>
-                    <Text style={styles.steps}>{warmup.duration}</Text>
+                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10 }}>{exercise.name}</Text>
+                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10, fontSize: 17, fontWeight: 'bold' }}>{exercise.description}</Text>
+                    <Text style={styles.steps}>{exercise.duration}</Text>
                   </View>
                 </View>
               ))}
-              {/* Exercise sections */}
-                {plans[selectedPlanIndex].exercises.map((exercise, index) => (
-                  <View style={styles.exercise} key={index}>
-                    <View style={{ gap: 5, }}>
-                      <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10 }}>{exercise.name}</Text>
-                      <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10, fontSize: 17, fontWeight: 'bold' }}>{exercise.description}</Text>
-                      <Text style={styles.steps}>{exercise.op}</Text>
-                    </View>
-                    <Video 
-                      source={{ uri: exercise.videoSource }}
-                      resizeMode={ResizeMode.CONTAIN}
-                      muted={true}
-                      fullscrean
-                      style={styles.backgroundVideo}
-                    />
+              {/* Render exercises for the selected day */}
+              {selectedDayPlan && selectedDayPlan.exercises.map((exercise, index) => (
+                <View style={styles.exercise} key={index}>
+                  <View style={{ gap: 5, }}>
+                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10 }}>{exercise.name}</Text>
+                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10, fontSize: 17, fontWeight: 'bold' }}>{exercise.description}</Text>
+                    <Text style={styles.steps}>{exercise.break}</Text>
+                    <Text style={styles.steps}>{exercise.op}</Text>
                   </View>
-                ))}
-              {/* Strečing section */}
-              {plans[selectedPlanIndex].stretching.map((stretching, index) => (
+                </View>
+              ))}
+              {/* Render stretching exercises */}
+              {selectedDayPlan && selectedDayPlan.stretching.map((exercise, index) => (
                 <View style={styles.stretching} key={index}>
                   <View style={{ gap: 5, }}>
-                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10 }}>{stretching.name}</Text>
-                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10, fontSize: 17, fontWeight: 'bold' }}>{stretching.description}</Text>
-                    <Text style={styles.steps}>{stretching.duration}</Text>
+                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10 }}>{exercise.name}</Text>
+                    <Text style={{ color: '#888', paddingLeft: 10, paddingRight: 10, fontSize: 17, fontWeight: 'bold' }}>{exercise.description}</Text>
+                    <Text style={styles.steps}>{exercise.duration}</Text>
                   </View>
                 </View>
               ))}
@@ -324,7 +526,7 @@ const DynamicTraining = ({navigation}) => {
   );
 }
 
-export default DynamicTraining;
+export default StrengthTraining;
 
 const styles = StyleSheet.create({
   container: {
@@ -360,7 +562,26 @@ const styles = StyleSheet.create({
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  
+
+  planswitch: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+  },
+
+  dayButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    margin: 5,
+    borderRadius: 10,
+    backgroundColor: '#333',
+  },
+
+  selectedDayButton: {
+    backgroundColor: '#006cff',
+  },
+
   warmup: {
     margin: 10,
     paddingTop: 5,
@@ -394,10 +615,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 
-  planswitch: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 10,
+  backgroundVideo: {
+    width: 150,
+    height: 100,
   },
 });
