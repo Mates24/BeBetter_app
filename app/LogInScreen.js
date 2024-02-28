@@ -19,6 +19,9 @@ const LogIn = ({ navigation }) => {
         // Store the user ID in AsyncStorage
         await AsyncStorage.setItem('userId', userData.record.id);
         navigation.navigate('Home', { userId: userData.record.id });
+
+        await AsyncStorage.setItem('email', email);
+        await AsyncStorage.setItem('password', password);
       } else {
         // Handle unsuccessful login, e.g., display an error message
         Alert.alert('Chyba pri prihlasovaní', 'Nesprávny email alebo heslo');

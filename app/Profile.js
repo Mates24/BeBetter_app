@@ -1,96 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableWithoutFeedback, ScrollView, TouchableOpacity, Image, TextInput, Keyboard, Button, Alert } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image, TextInput, Button, Alert, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PocketBase from 'pocketbase'; // Import PocketBase
-
-// Import AsyncAuthStore
-import AsyncAuthStore from './AsyncAuthStore'; // Adjust the path as needed
 
 const Profile = ({ navigation }) => {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
-  const [userId, setUserId] = useState('');
-
-  // Initialize an instance of AsyncAuthStore
-  const asyncAuthStore = new AsyncAuthStore();
-
-  // Initialize PocketBase with the AsyncAuthStore
-  const pb = new PocketBase('https://mathiasdb.em1t.xyz/', asyncAuthStore);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    // Retrieve user ID from AsyncStorage
-    retrieveUserId();
+    retrieveUserData();
   }, []);
-  
-  useEffect(() => {
-    // Load data from AsyncStorage when the user ID changes
-    if (userId) {
-      loadData();
-    }
-  }, [userId]);
 
-  const retrieveUserId = async () => {
+  const retrieveUserData = async () => {
     try {
-      const storedUserId = await AsyncStorage.getItem('userId');
-      if (storedUserId !== null) {
-        setUserId(storedUserId);
-      }
-    } catch (error) {
-      console.error('Error retrieving user ID:', error);
-    }
-  };
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedPassword = await AsyncStorage.getItem('password');
+      const userId = await AsyncStorage.getItem('userId')
 
-  const loadData = async () => {
-    try {
-      // Retrieve the user ID from AsyncStorage
-      const storedUserId = await AsyncStorage.getItem('userId');
-      if (storedUserId) {
-        // Query user data from the database
-        const userData = await pb.collection('users').getOne(storedUserId, {
-          expand: 'name,surname,email,birthdate', // Specify the fields to expand
-          fields: '*', // Retrieve all fields
-        });
-  
-        // Check if user data exists
-        if (userData) {
-          // Update the state with the fetched user data
-          setName(userData.name);
-          setSurname(userData.surname);
-          setEmail(userData.email);
-          setDob(userData.birthdate);
-        } else {
-          console.error('User data not found in database');
-        }
+      // Authenticate user with PocketBase using email and password
+      const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
+      const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
+      const records = await pb.collection('users').getOne(userId, {
+        expand: 'name,surname,email,birthdate',
+      }) 
+
+      if (userData && records) { // Check if both userData and records are valid
+        setName(records.name);
+        setSurname(records.surname);
+        setEmail(records.email);
+        setDob(records.birthdate);
       } else {
-        console.error('User ID not found in AsyncStorage');
+        console.error('User data not found in PocketBase');
       }
+      setLoading(false); // Set loading to false after data retrieval
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error retrieving user data:', error);
     }
   };
+
+  const handleSave = async () => {
+    try {
+      // Perform any necessary data validation
+    
+      // Save the updated data to PocketBase
+      await pb.collection('users').update(userId, {
+        name,
+        surname,
+        email,
+        birthdate: dob,
+      });
   
+      // Display success message
+      Alert.alert('Data saved successfully');
+    } catch (error) {
+      console.error('Error saving data:', error);
+      // Handle any errors that occur during data saving
+      Alert.alert('Error', 'Failed to save data. Please try again later.');
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      // Clear user data from AsyncStorage
+      await AsyncStorage.removeItem('userData');
+      // Navigate to the login screen
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+      Alert.alert('Error', 'Failed to log out. Please try again.');
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#006cff" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback>
         <ScrollView scrollEnabled={false}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={ () => navigation.navigate("Home")} style={styles.backbtn}>
-              <Image source={require('../images/arrowL.png')} style={{height: 14, width: 14,}}/>
-              <Text style={{color: '#006cff', fontSize: 16,}}>Späť</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.backbtn}>
+              <Image source={require('../images/arrowL.png')} style={{ height: 14, width: 14 }} />
+              <Text style={{ color: '#006cff', fontSize: 16 }}>Späť</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.profileinfo}>
-            <View style={{alignItems: 'center', marginBottom: 5,}}>
-              <Image source={require('../images/profile.png')} style={{height: 100, width: 100, position: 'absolute', top: -90,}}/>
+            <View style={{ alignItems: 'center', marginBottom: 5 }}>
+              <Image source={require('../images/profile.png')} style={{ height: 100, width: 100, position: 'absolute', top: -90 }} />
             </View>
-            <View style={{paddingLeft: 15,}}>
+            <View style={{ paddingLeft: 15 }}>
               <View>
                 <View style={styles.infosections}>
                   <Text style={styles.labes}>Meno:</Text>
-                  <TextInput 
+                  <TextInput
                     placeholder='Meno'
                     keyboardAppearance='dark'
                     maxLength={10}
@@ -103,7 +113,7 @@ const Profile = ({ navigation }) => {
                 </View>
                 <View style={styles.infosections}>
                   <Text style={styles.labes}>Priezvisko:</Text>
-                  <TextInput 
+                  <TextInput
                     placeholder='Priezvisko'
                     keyboardAppearance='dark'
                     maxLength={10}
@@ -116,7 +126,7 @@ const Profile = ({ navigation }) => {
                 </View>
                 <View style={styles.infosections}>
                   <Text style={styles.labes}>E-mail:</Text>
-                  <TextInput 
+                  <TextInput
                     placeholder='E-mail'
                     keyboardAppearance='dark'
                     maxLength={30}
@@ -129,7 +139,7 @@ const Profile = ({ navigation }) => {
                 </View>
                 <View style={styles.infosections}>
                   <Text style={styles.labes}>Dátum narodenia:</Text>
-                  <TextInput 
+                  <TextInput
                     placeholder='Dátum narodenia'
                     keyboardAppearance='dark'
                     maxLength={10}
@@ -141,17 +151,19 @@ const Profile = ({ navigation }) => {
                   />
                 </View>
               </View>
-              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 10, gap: 20,}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginVertical: 10, gap: 20 }}>
                 <View>
-                  <Button 
+                  <Button
                     title="Uložiť"
                     color={'#006cff'}
+                    onPress={handleSave}
                   />
                 </View>
                 <View>
-                  <Button 
+                  <Button
                     title="Odhlásiť sa"
                     color={'red'}
+                    onPress={handleLogout}
                   />
                 </View>
               </View>
@@ -167,9 +179,9 @@ export default Profile;
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: '#111',
-      paddingTop: 50,
+    flex: 1,
+    backgroundColor: '#111',
+    paddingTop: 50,
   },
   header: {
     paddingLeft: 10,
@@ -187,14 +199,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 5,
   },
-  heading: {
-    color: '#fff',
-    alignItems: 'center',
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-
   profileinfo: {
     backgroundColor: '#222',
     borderTopStartRadius: 50,
@@ -212,4 +216,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 5,
   },
-})
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#111',
+  },
+});

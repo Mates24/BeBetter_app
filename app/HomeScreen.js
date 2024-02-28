@@ -9,42 +9,34 @@ const HomeScreen = ({ navigation }) => {
   const [userId, setUserId] = useState('');
 
   useEffect(() => {
-    fetchUserName();
+    // Fetch user data and random quote on component mount
+    fetchUserData();
     setRandomQuote(getRandomQuote());
-
-    // Retrieve user ID from AsyncStorage
-    retrieveUserId();
   }, []);
 
-  const retrieveUserId = async () => {
+  const fetchUserData = async () => {
     try {
+      // Retrieve user ID from AsyncStorage
       const storedUserId = await AsyncStorage.getItem('userId');
-      if (storedUserId !== null) {
+      if (storedUserId) {
         setUserId(storedUserId);
-      }
-    } catch (error) {
-      console.error('Error retrieving user ID:', error);
-    }
-  };
 
-  const fetchUserName = async () => {
-    try {
-      const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
-      const userToken = await pb.getAuthToken();
-      if (userToken) {
-        const userData = await pb.collection('users').findOne({ token: userToken });
+        // Authenticate user with PocketBase using stored user ID
+        const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
+        const userData = await pb.collection('users').getOne(storedUserId, {
+          expand: 'name',
+        });
+
         if (userData) {
-          const { name } = userData;
-          setUserName(name);
+          setUserName(userData.name);
         } else {
-          Alert.alert('User not found', 'User data not found in the database.');
+          console.error('User data not found in PocketBase');
         }
       } else {
-        Alert.alert('User not authenticated', 'Please log in to see your name.');
+        console.error('User ID not found in AsyncStorage');
       }
     } catch (error) {
-      console.error('Error fetching user name:', error);
-      Alert.alert('Error', 'An error occurred while fetching user name.');
+      console.error('Error retrieving user data:', error);
     }
   };
 
