@@ -8,6 +8,8 @@ const HomeScreen = ({ navigation }) => {
   const [randomQuote, setRandomQuote] = useState('');
   const [userId, setUserId] = useState('');
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     // Fetch user data and random quote on component mount
     fetchUserData();
@@ -26,7 +28,6 @@ const HomeScreen = ({ navigation }) => {
       const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
 
       if (storedUserId && userData) {
-
         // Authenticate user with PocketBase using stored user ID
         const userData = await pb.collection('users').getOne(storedUserId, {
           expand: 'name',
@@ -37,6 +38,7 @@ const HomeScreen = ({ navigation }) => {
         } else {
           console.error('User data not found in PocketBase');
         }
+        setLoading(false);
       } else {
         console.error('User ID not found in AsyncStorage');
       }
@@ -54,6 +56,14 @@ const HomeScreen = ({ navigation }) => {
     const randomIndex = Math.floor(Math.random() * quotes.length);
     return quotes[randomIndex];
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#006cff" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -164,5 +174,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly',
     backgroundColor: '#222',
+  },
+
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#111',
   },
 });
