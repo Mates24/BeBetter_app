@@ -14,16 +14,16 @@ const Profile = ({ navigation }) => {
     retrieveUserData();
   }, []);
 
+  const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
   const retrieveUserData = async () => {
     try {
       const storedEmail = await AsyncStorage.getItem('email');
       const storedPassword = await AsyncStorage.getItem('password');
-      const userId = await AsyncStorage.getItem('userId')
+      const storedUserId = await AsyncStorage.getItem('userId')
 
       // Authenticate user with PocketBase using email and password
-      const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
       const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
-      const records = await pb.collection('users').getOne(userId, {
+      const records = await pb.collection('users').getOne(storedUserId, {
         expand: 'name,surname,email,birthdate',
       }) 
 
@@ -44,21 +44,26 @@ const Profile = ({ navigation }) => {
   const handleSave = async () => {
     try {
       // Perform any necessary data validation
-    
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedPassword = await AsyncStorage.getItem('password');
+      const storedUserId = await AsyncStorage.getItem('userId');
       // Save the updated data to PocketBase
-      await pb.collection('users').update(userId, {
-        name,
-        surname,
-        email,
-        birthdate: dob,
-      });
+      const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
+      if (userData && storedUserId){
+        await pb.collection('users').update(storedUserId, {
+            name,
+            surname,
+            email,
+            birthdate: dob,
+          });
+      }  
   
       // Display success message
-      Alert.alert('Data saved successfully');
+      Alert.alert('Zmeny boli uložené');
     } catch (error) {
       console.error('Error saving data:', error);
       // Handle any errors that occur during data saving
-      Alert.alert('Error', 'Failed to save data. Please try again later.');
+      Alert.alert('Error', 'Chyba pri ukladaní. Prosím skúste to znova neskôr.');
     }
   };
 
@@ -67,7 +72,7 @@ const Profile = ({ navigation }) => {
       // Clear user data from AsyncStorage
       await AsyncStorage.removeItem('userData');
       // Navigate to the login screen
-      navigation.navigate('Login');
+      navigation.navigate('LogIn');
     } catch (error) {
       console.error('Error logging out:', error);
       Alert.alert('Error', 'Failed to log out. Please try again.');
