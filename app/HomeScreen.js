@@ -7,6 +7,7 @@ const HomeScreen = ({ navigation }) => {
   const [userName, setUserName] = useState('');
   const [randomQuote, setRandomQuote] = useState('');
   const [userId, setUserId] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch user data and random quote on component mount
@@ -17,12 +18,17 @@ const HomeScreen = ({ navigation }) => {
   const fetchUserData = async () => {
     try {
       // Retrieve user ID from AsyncStorage
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedPassword = await AsyncStorage.getItem('password');
       const storedUserId = await AsyncStorage.getItem('userId');
-      if (storedUserId) {
-        setUserId(storedUserId);
+
+      const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
+
+      const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
+
+      if (storedUserId && userData) {
 
         // Authenticate user with PocketBase using stored user ID
-        const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
         const userData = await pb.collection('users').getOne(storedUserId, {
           expand: 'name',
         });
