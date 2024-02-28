@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import PocketBase from 'pocketbase'; // Import PocketBase
 
@@ -7,7 +7,15 @@ const HomeScreen = ({ navigation }) => {
   const [userName, setUserName] = useState('');
   const [randomQuote, setRandomQuote] = useState('');
   const [userId, setUserId] = useState('');
+
   const [loading, setLoading] = useState(true);
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#006cff" />
+      </View>
+    );
+  }
 
   useEffect(() => {
     // Fetch user data and random quote on component mount
@@ -35,6 +43,7 @@ const HomeScreen = ({ navigation }) => {
 
         if (userData) {
           setUserName(userData.name);
+          setLoading(false);
         } else {
           console.error('User data not found in PocketBase');
         }

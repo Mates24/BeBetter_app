@@ -14,6 +14,15 @@ import {
 
 const StrengthTraining = ({navigation}) => {
 
+  const [loading, setLoading] = useState(true);
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#006cff" />
+      </View>
+    );
+  }
+
   const Separator = () => <View style={styles.separator} />;
 
   const dismissKeyboard = () => {
