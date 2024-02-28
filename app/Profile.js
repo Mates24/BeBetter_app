@@ -57,7 +57,6 @@ const Profile = ({ navigation }) => {
             birthdate: dob,
           });
       }  
-  
       // Display success message
       Alert.alert('Zmeny boli uložené');
     } catch (error) {
@@ -75,7 +74,7 @@ const Profile = ({ navigation }) => {
       navigation.navigate('LogIn');
     } catch (error) {
       console.error('Error logging out:', error);
-      Alert.alert('Error', 'Failed to log out. Please try again.');
+      Alert.alert('Error', 'Chyba pri odhlasovaní. Prosím skúste to neskôr.');
     }
   };
 
