@@ -22,11 +22,11 @@ const SignUp = ({ navigation }) => {
 
   const handleSignUp = async () => {
     if (!username || !email || !password || !passwordConfirm) {
-      Alert.alert('Please fill in all fields');
+      Alert.alert('Prosím vyplňte všetky polia');
       return;
     }
     if (password !== passwordConfirm) {
-      Alert.alert('Passwords do not match');
+      Alert.alert('Heslá sa nezhodujú');
       return;
     }
 
