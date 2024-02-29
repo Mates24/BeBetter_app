@@ -40,14 +40,14 @@ const SignUp = ({ navigation }) => {
       });
 
       // Display success message
-      Alert.alert('Signup successful');
+      Alert.alert('Registrácia úspešná');
       navigation.navigate('LogIn');
     } catch (error) {
       console.error('Error signing up:', error);
       if (error.code === 'EMAIL_EXISTS') {
-        Alert.alert('Email already in use', 'Please use a different email address.');
+        Alert.alert('Účet s týmto emailom už existuje.', 'Prosím použite iný email.');
       } else {
-        Alert.alert('Signup failed', 'Please try again later.');
+        Alert.alert('Registrácia zlyhala', 'Skúste to znova neskôr.');
       }
     }
   };
