@@ -131,7 +131,7 @@ const Profile = ({ navigation }) => {
                 <View style={styles.infosections}>
                   <Text style={styles.labes}>E-mail:</Text>
                   <TextInput
-                    placeholder='E-mail'
+                    placeholder='YYYY-MM-DD'
                     keyboardAppearance='dark'
                     maxLength={30}
                     placeholderTextColor={'#bbb'}
