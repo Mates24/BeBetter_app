@@ -1,67 +1,43 @@
-import React, {useState, useEffect} from 'react';
-import { 
-  SafeAreaView, 
-  StyleSheet, 
-  Text, 
-  View, 
-  Image, 
-  TouchableOpacity, 
-  Button, 
-  TextInput, 
-  TouchableWithoutFeedback, 
-  Alert, 
+import React, { useState, useEffect } from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Button,
+  TextInput,
+  TouchableWithoutFeedback,
+  Alert,
   Keyboard,
   ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PocketBase from 'pocketbase';
-
-const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
+import PocketBase from 'pocketbase'; // Import PocketBase
 
 const MakeOwn = ({ navigation }) => {
   const [elements, setElements] = useState([]);
-  const [addedElements, setAddedElements] = useState([]);
-
-  const [text1, onChangeText1] = useState('Čas trvania: min');
-  const [text2, onChangeText2] = useState('Počet op.: ');
-  const [text3, onChangeText3] = useState('Čas trvania: min');
-
-  const [text4, onChangeText4] = useState('Čas trvania: min');
-  const [text5, onChangeText5] = useState('Počet op.: ');
-  const [text6, onChangeText6] = useState('Čas trvania: min');
-
-  const [userId, setUserId] = useState('');
+  const [programName, setProgramName] = useState('Plán 1');
+  const [description, setDescription] = useState('');
+  const [program, setProgram] = useState('');
+  const [recordID, setRecordID] = useState('');
+  const [buttonVisible, setButtonVisible] = useState(true);
+  const [screenVissible, setScreenVissible] = useState(false);
 
   const Separator = () => <View style={styles.separator} />;
-
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
 
-  const [programName, setProgramName] = useState('Názov');
-  const [program, setProgram] = useState('');
-  const [recordID, setRecordID] = useState('');
-
-  const retrieveUserId = async () => {
-    try {
-      const storedUserId = await AsyncStorage.getItem('userId');
-      if (storedUserId !== null) {
-        setUserId(storedUserId);
-      }
-    } catch (error) {
-      console.error('Error retrieving user ID:', error);
-    }
-  };
+  // Initialize PocketBase
+  const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
 
   useEffect(() => {
-    // Load the saved program when the component mounts
-    loadProgram();
     // Generate record ID when the component mounts
     generateRecordID();
-  }, []);
-  useEffect(() => {
-    // Retrieve user ID from AsyncStorage
-    retrieveUserId();
+    // Load saved program when component mounts
+    loadSavedProgram();
   }, []);
 
   const generateRecordID = async () => {
@@ -70,115 +46,65 @@ const MakeOwn = ({ navigation }) => {
     setRecordID(id);
   };
 
-  const loadProgram = async () => {
-    try {
-      const savedScreen = await AsyncStorage.getItem('saved_screens');
-      if (savedScreen !== null) {
-        const { savedProgramName, savedProgramContent } = JSON.parse(savedScreen);
-        setProgramName(savedProgramName);
-        setProgram(savedProgramContent);
-      }
-    } catch (error) {
-      console.error('Chyba pri načítaní:', error);
-    }
-  };
-
-
-  const saveScreen = async () => {
-    try {
-      const storedUserId = await AsyncStorage.getItem('userId');
-      const screenData = JSON.stringify({
-        userID: userId,
-        savedProgramName: programName,
-        savedProgramContent: program,
-        addedElements: addedElements,
-        elements: elements.map(element => element.props.children)
-      });
-      
-      // Save to PocketBase database
-      const data = {
-        "recordID": recordID,
-        "userID": storedUserId, // Updated to use storedUserId
-        "savedProgramName": programName,
-        "savedProgramContent": program,
-        "elements": screenData
-      };
-
-      await pb.collection('saved_screens').update(data);
-      
-      // Alert user
-      Alert.alert('Tréning bol úspešne uložený');
-    } catch (error) {
-      console.error('Error saving screen:', error);
-      Alert.alert('Chyba pri ukladaní:', error.message);
-    }
-  };
-
-  const deleteScreen = async () => {
-    try {
-      await AsyncStorage.removeItem('saved_screens');
-      setProgram('');
-      setProgramName('Názov');
-      Alert.alert('Tréning bol úspešne vymazaný');
-    } catch (error) {
-      console.error('Chyba pri vymazávaní', error);
-    }
-  };
-
   const addElement = (type) => {
     // Generate a unique key for the new element
     const key = Math.random().toString(36).substring(7);
-    // Create the new TouchableOpacity element based on the selected type
-    const newWarmup = (
-      <TouchableOpacity key={key} style={styles.warmup}>
-        <Text style={{color: '#888', paddingLeft: 10,}}>{type}</Text>
-        <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
-        <TextInput
-          onChangeText={onChangeText4}
-          value={text4}
-          keyboardAppearance='dark'
-          style={styles.inputsteps}
-        />
-      </TouchableOpacity>
-    );
-    const newExercise = (
-      <TouchableOpacity key={key} style={styles.exercise}>
-        <Text style={{color: '#888', paddingLeft: 10,}}>{type}</Text>
-        <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
-        <TextInput
-          onChangeText={onChangeText5}
-          value={text5}
-          keyboardAppearance='dark'
-          style={styles.inputsteps}
-        />
-      </TouchableOpacity>
-    );
-    const newStretching = (
-      <TouchableOpacity key={key} style={styles.stretching}>
-        <Text style={{color: '#888', paddingLeft: 10,}}>{type}</Text>
-        <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
-        <TextInput
-          onChangeText={onChangeText6}
-          value={text6}
-          keyboardAppearance='dark'
-          style={styles.inputsteps}
-        />
-      </TouchableOpacity>
-    );
-    // Update the state to include the new TouchableOpacity element
-    if (type === "Rozcvička") {
-      setElements(prevElements => [...prevElements, newWarmup]);
-    } else if (type === "Cvičenie") {
-      setElements(prevElements => [...prevElements, newExercise]);
-    } else if (type === "Strečing") {
-      setElements(prevElements => [...prevElements, newStretching]);
-    }
-    setAddedElements(prevElements => [...prevElements, { type, key }]);
+    // Create the new element object based on the selected type
+    const newElement = {
+      type: type,
+      key: key,
+      content: '--',
+      typeText: getTypeText(type)
+    };
+    // Update the state to include the new element in the elements array
+    setElements(prevElements => [...prevElements, newElement]);
   };
+
+  const getStyleByType = (type) => {
+    switch (type) {
+      case "Rozcvička":
+        return styles.warmup;
+      case "Cvičenie":
+        return styles.exercise;
+      case "Strečing":
+        return styles.stretching;
+      default:
+        return null;
+    }
+  };
+
+  const getTypeText = (type) => {
+    switch (type) {
+      case "Rozcvička":
+        return 'Čas trvania: min';
+      case "Cvičenie":
+        return 'Počet op.: ';
+      case "Strečing":
+        return 'Čas trvania: min';
+      default:
+        return '';
+    }
+  };
+
+  const handleContentChange = (content, index) => {
+    setElements(prevElements => {
+      const updatedElements = [...prevElements];
+      updatedElements[index] = {...updatedElements[index], content: content};
+      return updatedElements;
+    });
+  };
+  
+  const handleTypeTextChange = (typeText, index) => {
+    setElements(prevElements => {
+      const updatedElements = [...prevElements];
+      updatedElements[index] = {...updatedElements[index], typeText: typeText};
+      return updatedElements;
+    });
+  };  
 
   const showElementPicker = () => {
     Alert.alert(
-      'Vyberte si typ',
+      'Vybrať typ',
       'Vyberte si typ tréningu, ktorý chcete pridať:',
       [
         {
@@ -189,95 +115,203 @@ const MakeOwn = ({ navigation }) => {
           text: 'Cvičenie',
           onPress: () => addElement("Cvičenie"),
         },
-        { 
-          text: 'Strečing', 
-          onPress: () => addElement("Strečing"), 
+        {
+          text: 'Strečing',
+          onPress: () => addElement("Strečing"),
         },
       ],
       { cancelable: true }
     );
   };
 
+  const NewPlan = async () =>{
+    try{
+      const storedEmail = await AsyncStorage.getItem('email');
+        const storedPassword = await AsyncStorage.getItem('password');
+        const storedUserId = await AsyncStorage.getItem('userId');
+      // Authenticate with PocketBase
+      const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
+      if (userData && storedUserId){
+        const newPlan = await pb.collection('plans').create({
+          user: storedUserId,
+          name: programName,
+          description,
+          elements,
+        });
+        if (newPlan && newPlan.id) { // Check if newPlan and newPlan.id are not undefined
+          // Save the ID of the newly created plan to AsyncStorage
+          await AsyncStorage.setItem('planId', newPlan.id);
+          
+          setButtonVisible(false);
+          setScreenVissible(true);
+          Alert.alert('Plán bol úspešne vytvorený');
+        } else {
+          console.error('Error creating plan: newPlan or newPlan.id is undefined');
+        }
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    };
+  };
+
+  const handleSave = async () => {
+    try {
+      // Retrieve necessary data from AsyncStorage
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedPassword = await AsyncStorage.getItem('password');
+      const storedPlanId = await AsyncStorage.getItem('planId');
+
+      // Authenticate with PocketBase
+      const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
+
+      if (userData && storedPlanId) {
+
+        const elementsJSON = JSON.stringify(elements);
+
+        await pb.collection('plans').update(storedPlanId, {
+          name: programName,
+          description: description,
+          elements: elementsJSON,
+        });
+      }
+      // Display success message
+      Alert.alert('Zmeny boli uložené');
+    } catch (error) {
+      console.error('Error saving data:', error);
+      // Handle any errors that occur during data saving
+      Alert.alert('Error', 'Chyba pri ukladaní. Prosím skúste to znova neskôr.');
+    }
+  };
+
+  const deletePlan = async () => {
+    try {
+      // Retrieve necessary data from AsyncStorage
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedPassword = await AsyncStorage.getItem('password');
+      const storedPlanId = await AsyncStorage.getItem('planId');
+
+      // Authenticate with PocketBase
+      const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
+
+      if (userData && storedPlanId) {
+        await pb.collection('plans').delete(storedPlanId)
+      }
+      navigation.navigate("Home");
+      // Display success message
+      Alert.alert('Tréningový plán bol vymazaný');
+    } catch (error) {
+      console.error('Error saving data:', error);
+      // Handle any errors that occur during data saving
+      Alert.alert('Error', 'Chyba pri vymazávaní. Prosím skúste to znova neskôr.');
+    }
+  }
+
+  const loadSavedProgram = async () => {
+    try {
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedPassword = await AsyncStorage.getItem('password');
+      const storedPlanId = await AsyncStorage.getItem('planId');
+
+      const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
+      
+      if (userData && storedPlanId) {
+        const savedProgram = await pb.collection('plans').getOne(storedPlanId, savedProgram);
+
+        if (savedProgram) {
+          const { name, description, elements } = savedProgram;
+          setProgramName(name);
+          setDescription(description);
+          setElements(elements);
+          setScreenVissible(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading saved program:', error);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <SafeAreaView style={styles.container}>
         <ScrollView>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={ () => navigation.navigate("Home")} style={styles.backbtn}>
-              <Image source={require('../images/arrowL.png')} style={{height: 14, width: 14,}}/>
-              <Text style={{color: '#006cff', fontSize: 16,}}>Späť</Text>
-            </TouchableOpacity>
-            <TextInput
-              value={programName}
-              onChangeText={setProgramName}
-              placeholder="Názov"
-              placeholderTextColor={'#555'}
-              keyboardAppearance='dark'
-              multiline={true}
-              style={styles.programNameInput}
-            />
-            <View style={styles.editbtns}>
-              <TouchableOpacity style={styles.deletebtn} onPress={deleteScreen}>
-                <Text style={{color: '#ff0000', fontSize: 16}}>Vymazať</Text>
+          {screenVissible && (
+            <View style={styles.header}>
+              <TouchableOpacity onPress={() => navigation.navigate("Home")} style={styles.backbtn}>
+                <Image source={require('../images/arrowL.png')} style={{ height: 14, width: 14, }} />
+                <Text style={{ color: '#006cff', fontSize: 16, }}>Späť</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.savebtn}>
-                <Text style={{color: '#006cff', fontSize: 16,}} onPress={saveScreen}>Uložiť</Text>
-              </TouchableOpacity>
+              <TextInput
+                value={programName}
+                onChangeText={setProgramName}
+                placeholder="Názov"
+                placeholderTextColor={'#555'}
+                keyboardAppearance='dark'
+                multiline={true}
+                style={styles.programNameInput}
+              />
+              <View style={styles.editbtns}>
+                <TouchableOpacity style={styles.deletebtn} onPress={deletePlan}>
+                  <Text style={{ color: '#ff0000', fontSize: 16 }}>Vymazať</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.savebtn} onPress={handleSave}>
+                  <Text style={{ color: '#006cff', fontSize: 16, }}>Uložiť</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          <Separator/>
-          <View>
-            <TextInput
-              value={program}
-              onChangeText={setProgram}
-              style={styles.input}
-              editable
-              multiline
-              maxLength={50}
-              numberOfLines={2}
-              placeholder="Poznámky"
-              placeholderTextColor={'#555'}
-              keyboardType="default"
-              keyboardAppearance='dark'
+          )}
+          {screenVissible && (  
+            <Separator />
+          )}
+          {screenVissible &&(
+            <View>
+              <TextInput
+                value={description}
+                onChangeText={setDescription}
+                style={styles.input}
+                editable
+                multiline
+                maxLength={50}
+                numberOfLines={2}
+                placeholder="Poznámky"
+                placeholderTextColor={'#555'}
+                keyboardType="default"
+                keyboardAppearance='dark'
+              />
+              {elements.map((element, index) => (
+                <TouchableOpacity key={element.key} style={getStyleByType(element.type)}>
+                  <Text style={{ color: '#888', paddingLeft: 10 }}>{element.type}</Text>
+                  <TextInput
+                     style={{ color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold' }}
+                    keyboardAppearance='dark'
+                    value={element.content} // Bind value to content property
+                    onChangeText={(content) => handleContentChange(content, index)} // Handle content change
+                  />
+                  <TextInput
+                    style={styles.inputsteps}
+                    keyboardAppearance='dark'
+                    value={(element.typeText)}
+                    onChangeText={(typeText) => handleTypeTextChange(typeText, index)} // Handle type text change
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+          {screenVissible && (
+            <Button
+              title="Pridať krok"
+              color='#999'
+              onPress={showElementPicker}
             />
-            <Text style={{color: '#fff', paddingLeft: 10, fontWeight: 'bold', fontSize: 20}}>Kroky</Text>
-            {/* WarmUp */}
-            <TouchableOpacity style={styles.warmup}>
-              <Text style={{color: '#888', paddingLeft: 10,}}>Rozcvička</Text>
-              <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
-              <TextInput onChangeText={onChangeText1} value={text1} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
-            </TouchableOpacity>
-            {/* New WarmUp */}
-            <View style={styles.content}>
-              {elements.filter(element => element.props.style === styles.warmup).map(element => element)}
+          )}
+          {buttonVisible && (
+            <View style={{ top: '900%', justifyContent: 'center', alignContent: 'center', }}>
+              <Button
+                title="Vytvoriť nový plán"
+                color='#fff'
+                onPress={NewPlan}
+              />
             </View>
-            {/* Exercise */}
-            <TouchableOpacity style={styles.exercise}>
-              <Text style={{color: '#888', paddingLeft: 10,}}>Cvičenie</Text>
-              <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
-              <TextInput onChangeText={onChangeText5} value={text2} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
-            </TouchableOpacity>
-            {/* New Exercise */}
-            <View style={styles.content}>
-              {elements.filter(element => element.props.style === styles.exercise).map(element => element)}
-            </View>
-            {/* Streching */}
-            <TouchableOpacity style={styles.stretching}>
-              <Text style={{color: '#888', paddingLeft: 10,}}>Strečing</Text>
-              <TextInput style={{color: '#888', paddingLeft: 10, fontSize: 17, fontWeight: 'bold'}} keyboardAppearance='dark'>--</TextInput>
-              <TextInput onChangeText={onChangeText3} value={text3} keyboardAppearance='dark' style={styles.inputsteps}></TextInput>
-            </TouchableOpacity>
-            {/* New Streching */}
-            <View style={styles.content}>
-              {elements.filter(element => element.props.style === styles.stretching).map(element => element)}
-            </View>
-          </View>
-
-          <Button 
-            title="Pridať krok"
-            color='#999'
-            onPress={showElementPicker}
-          />
+          )}
         </ScrollView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -331,7 +365,16 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
   },
+  inputsteps: {
+    color: '#888',
+    paddingStart: 10,
+  },
 
+  separator: {
+    marginBottom: 10,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
   warmup: {
     margin: 10,
     paddingTop: 5,
@@ -358,15 +401,5 @@ const styles = StyleSheet.create({
     borderStartWidth: 7,
     borderRadius: 12,
     borderColor: 'green',
-  },
-  inputsteps: {
-    color: '#888',
-    paddingLeft: 10,
-  },
-
-  separator: {
-    marginBottom: 10,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
   },
 });
