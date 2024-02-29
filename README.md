@@ -6,4 +6,4 @@ Práca pre stredoškolskú dobornú činnosť v obore č.11 - Informatika.
 
 Postup s prácou na krajské kolo.
 
-Aplikáciu si môžete stiahnúť tu: [BeBetter](http://krovmat.eu)
+Aplikáciu si môžete stiahnúť tu: [BeBetter](https://bebetter.em1t.xyz)
