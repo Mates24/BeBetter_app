@@ -4,7 +4,7 @@
     "slug": "bebetter",
     "version": "2.0.0",
     "orientation": "portrait",
-    "icon": "./images/favicon.png",
+    "icon": "./images/splash.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./images/splash.png",
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./images/favicon.png",
+        "foregroundImage": "./images/splash.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.matejcik24.bebetter"
