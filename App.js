@@ -10,13 +10,10 @@ import DynamicTraining from "./app/DynamicScreen";
 import StrengthTraining from "./app/StrengthScreen";
 import EnduranceTraining from "./app/EnduranceScreen";
 import Profile from "./app/Profile";
-import PocketBase from 'pocketbase';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-
-  const pb = new PocketBase('https://mathiasdb.em1t.xyz/');
 
   return (
     <NavigationContainer>
@@ -24,9 +21,7 @@ const App = () => {
         <Stack.Screen name="Introduction" component={Introduction} options={{headerShown: false,}}/>
         <Stack.Screen name="LogIn" component={LogIn} options={{headerShown: false,}}/>
         <Stack.Screen name="SignUp" component={SignUp} options={{headerShown: false,}}/>
-        <Stack.Screen name="Home" options={{ headerShown: false }}>
-          {(props) => <HomeScreen {...props} pb={pb} />}
-        </Stack.Screen>
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Profile" component={Profile} options={{headerShown: false,}}/>
         <Stack.Screen name="MakeOwn" component={MakeOwn} options={{headerShown: false,}}/>
         <Stack.Screen name="DynamicTraining" component={DynamicTraining} options={{headerShown: false,}}/>
