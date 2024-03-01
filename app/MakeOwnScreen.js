@@ -24,6 +24,8 @@ const MakeOwn = ({ navigation }) => {
   const [buttonVisible, setButtonVisible] = useState(true);
   const [screenVissible, setScreenVissible] = useState(false);
 
+  const [loading, setLoading] = useState(true);
+
   const Separator = () => <View style={styles.separator} />;
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -233,6 +235,14 @@ const MakeOwn = ({ navigation }) => {
     }
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#006cff" />
+      </View>
+    );
+  }
+
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <SafeAreaView style={styles.container}>
@@ -412,6 +422,13 @@ const styles = StyleSheet.create({
     paddingTop: '90%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#111',
   },
 
 });
