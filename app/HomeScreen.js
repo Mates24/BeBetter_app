@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.subcontainer}>
         <View style={styles.welcome}>
           <View>
-            <Text style={{ fontSize: 40, fontWeight: 'bold', color: '#fff' }}>{`Vitaj ${userName}!`}</Text>
+            <Text style={{ fontSize: 35, fontWeight: 'bold', color: '#fff' }}>{`Vitaj ${userName}!`}</Text>
             <Text style={{ fontSize: 18, color: '#fff', paddingTop: 5 }}>Začni svoj deň tréningom</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('Profile', { userId })}>
