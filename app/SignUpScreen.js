@@ -141,7 +141,7 @@ const SignUp = ({ navigation }) => {
           </View>
           <View style={{ position: 'absolute', bottom: 0, left: '21.5%', flexDirection: 'row', gap: 10 }}>
             <Text style={{ color: '#fff', textAlign: 'center' }}>Už máte účet?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
               <Text style={{ color: 'red', paddingBottom: 0 }}>Prihlásiť sa</Text>
             </TouchableOpacity>
           </View>
