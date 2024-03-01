@@ -20,7 +20,6 @@ const MakeOwn = ({ navigation }) => {
   const [elements, setElements] = useState([]);
   const [programName, setProgramName] = useState('Plán 1');
   const [description, setDescription] = useState('');
-  const [program, setProgram] = useState('');
   const [recordID, setRecordID] = useState('');
   const [buttonVisible, setButtonVisible] = useState(true);
   const [screenVissible, setScreenVissible] = useState(false);
@@ -223,6 +222,10 @@ const MakeOwn = ({ navigation }) => {
           setDescription(description);
           setElements(elements);
           setScreenVissible(true);
+          setButtonVisible(false);
+        } else {
+          setScreenVissible(false);
+          setButtonVisible(true);
         }
       }
     } catch (error) {
@@ -303,11 +306,11 @@ const MakeOwn = ({ navigation }) => {
               onPress={showElementPicker}
             />
           )}
-          {buttonVisible && (
-            <View style={{ top: '900%', justifyContent: 'center', alignContent: 'center', }}>
+          {!screenVissible && buttonVisible && (
+            <View style={styles.centeredButtonContainer}>
               <Button
                 title="Vytvoriť nový plán"
-                color='#fff'
+                color='#888'
                 onPress={NewPlan}
               />
             </View>
@@ -403,4 +406,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderColor: 'green',
   },
+
+  centeredButtonContainer: {
+    flex: 2,
+    paddingTop: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
 });
