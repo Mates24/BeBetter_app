@@ -2,7 +2,7 @@
   "expo": {
     "name": "BeBetter",
     "slug": "bebetter",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./images/favicon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./images/favicon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.matejcik24.bebetter"
