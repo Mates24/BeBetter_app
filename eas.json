@@ -20,6 +20,9 @@
       "android": {
         "buildType": "apk"
       }
+    },
+    "release": {
+      "channel": "default"
     }
   },
   "submit": {
