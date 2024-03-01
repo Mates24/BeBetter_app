@@ -313,6 +313,7 @@ const MakeOwn = ({ navigation }) => {
             <Button
               title="Pridať krok"
               color='#999'
+              width='45%'
               onPress={showElementPicker}
             />
           )}
