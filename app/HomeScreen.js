@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     flex: 1,
-    gap: '20'
+    gap: 20,
   },
   row1: {
     flexDirection: 'row',
