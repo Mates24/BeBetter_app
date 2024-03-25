@@ -24,8 +24,6 @@ const MakeOwn = ({ navigation }) => {
   const [buttonVisible, setButtonVisible] = useState(true);
   const [screenVissible, setScreenVissible] = useState(false);
 
-  const [loading, setLoading] = useState(true);
-
   const Separator = () => <View style={styles.separator} />;
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -234,14 +232,6 @@ const MakeOwn = ({ navigation }) => {
       console.error('Error loading saved program:', error);
     }
   };
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#006cff" />
-      </View>
-    );
-  }
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
