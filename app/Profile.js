@@ -137,7 +137,7 @@ const Profile = ({ navigation }) => {
                 <View style={styles.infosections}>
                   <Text style={styles.labes}>E-mail:</Text>
                   <TextInput
-                    placeholder='YYYY-MM-DD'
+                    placeholder='Email'
                     keyboardAppearance='dark'
                     maxLength={30}
                     placeholderTextColor={'#bbb'}
@@ -150,7 +150,7 @@ const Profile = ({ navigation }) => {
                 <View style={styles.infosections}>
                   <Text style={styles.labes}>Dátum narodenia:</Text>
                   <TextInput
-                    placeholder='Dátum narodenia'
+                    placeholder='YYYY-MM-DD'
                     keyboardAppearance='dark'
                     maxLength={10}
                     placeholderTextColor={'#bbb'}
