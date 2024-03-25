@@ -8,6 +8,8 @@ const Profile = ({ navigation }) => {
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
+  const [height, setHeight] = useState('');
+  const [weight, setWeight] = useState('');
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
@@ -24,7 +26,7 @@ const Profile = ({ navigation }) => {
       // Authenticate user with PocketBase using email and password
       const userData = await pb.collection('users').authWithPassword(storedEmail, storedPassword);
       const records = await pb.collection('users').getOne(storedUserId, {
-        expand: 'name,surname,email,birthdate',
+        expand: 'name,surname,email,birthdate,height,weight',
       }) 
 
       if (userData && records) { // Check if both userData and records are valid
@@ -32,6 +34,8 @@ const Profile = ({ navigation }) => {
         setSurname(records.surname);
         setEmail(records.email);
         setDob(records.birthdate);
+        setHeight(records.height);
+        setWeight(records.weight);
       } else {
         console.error('User data not found in PocketBase');
       }
@@ -55,6 +59,8 @@ const Profile = ({ navigation }) => {
             surname,
             email,
             birthdate: dob,
+            height,
+            weight,
           });
       }  
       // Display success message
@@ -152,6 +158,32 @@ const Profile = ({ navigation }) => {
                     style={styles.profileinputs}
                     value={dob}
                     onChangeText={setDob}
+                  />
+                </View>
+                <View style={styles.infosections}>
+                  <Text style={styles.labes}>Výška:</Text>
+                  <TextInput
+                    placeholder='Výška (cm)'
+                    keyboardAppearance='dark'
+                    maxLength={10}
+                    placeholderTextColor={'#bbb'}
+                    color={'#fff'}
+                    style={styles.profileinputs}
+                    value={height}
+                    onChangeText={setHeight}
+                  />
+                </View>
+                <View style={styles.infosections}>
+                  <Text style={styles.labes}>Váha:</Text>
+                  <TextInput
+                    placeholder='Váha (kg)'
+                    keyboardAppearance='dark'
+                    maxLength={10}
+                    placeholderTextColor={'#bbb'}
+                    color={'#fff'}
+                    style={styles.profileinputs}
+                    value={weight}
+                    onChangeText={setWeight}
                   />
                 </View>
               </View>
